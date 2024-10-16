@@ -1,4 +1,4 @@
-import { FC, memo, useEffect } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import { TModalProps } from './type';
@@ -12,7 +12,8 @@ export const Modal: FC<TModalProps> = memo(({ title, onClose, children }) => {
       e.key === 'Escape' && onClose();
     };
 
-    document.addEventListener('keydown', handleEsc);
+    document.addEventListener('keydown', () => handleEsc);
+
     return () => {
       document.removeEventListener('keydown', handleEsc);
     };

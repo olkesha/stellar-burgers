@@ -1,14 +1,19 @@
-import { FC, useMemo } from 'react';
-import { TConstructorIngredient } from '@utils-types';
+import { FC, useEffect, useMemo } from 'react';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
+import { useDispatch, useSelector } from '../../services/store';
+import { getIngredientsData } from '../../services/slices/ingredientSlice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
+  const ingredients: TIngredient[] = useSelector(getIngredientsData);
+  const buns: TIngredient[] = ingredients.filter(item => item.type === 'bun')
+
   const constructorItems = {
-    bun: {
-      price: 0
+    bun: buns[0] || {
+      price: 0,
     },
-    ingredients: []
+    ingredients: [],
   };
 
   const orderRequest = false;
@@ -24,13 +29,11 @@ export const BurgerConstructor: FC = () => {
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
       constructorItems.ingredients.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price,
+        (s: number, v: TIngredient) => s + (v.price || 0),
         0
       ),
     [constructorItems]
   );
-
-  return null;
 
   return (
     <BurgerConstructorUI
