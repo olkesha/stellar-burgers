@@ -31,7 +31,7 @@ export const ProtectedRoute = ({onlyUnAuth = false, children}: ProtectedRoutePro
 
   if (onlyUnAuth && user) { // если пользователь на странице авторизации и данные есть в хранилище
     const from = location.state?.from || { pathname: '/' };
-    return <Navigate replace to="/" state={{from}} />;
+    return <Navigate replace to="/" state={from} />;
   }
 
   return children;

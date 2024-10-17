@@ -3,7 +3,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrdersApi } from '../../utils/burger-api';
 import { TOrder } from '@utils-types';
 
-const fetchFeeds = createAsyncThunk(
+// для авторизованного пользака
+const fetchOrders = createAsyncThunk(
   'feed/fetchOrders',
   async () => {
     const data = await getOrdersApi();
@@ -31,15 +32,15 @@ const ordersSlice = createSlice({
       state.request = action.payload;
     }
   },
+  extraReducers: (builder) => {
+    builder
+    .addCase(fetchOrders.fulfilled, (state, action) => {
+      state.orders = action.payload;
+    })
+  },
   selectors: {
     getOrders: state => state.orders,
     selectOrdersRequest: state => state.request
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchFeeds.fulfilled, (state, action) => {
-        state.orders = action.payload;
-      })
   }
 })
 

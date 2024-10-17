@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import '../../index.css';
 import styles from './app.module.css';
 
@@ -19,29 +19,38 @@ import { OrderInfo } from '@components';
 import { IngredientDetails } from '@components';
 
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { useState } from 'react';
 
 
 
 const App = () => {
+  const location = useLocation()
+  // console.log(location);
+  
+  const background = location.state?.background || location
+
   return (
     <>
       <div className={styles.app}>
         <AppHeader />
-        <Routes>
+        <Routes location={background}>
           <Route path='/' element={<ConstructorPage />}/>
           <Route path='/feed' element={<Feed />} />
-          <Route path='/feed/:number' element={<Modal children={<OrderInfo />} title={'Заказ'} onClose={() => {}} />} />
-          <Route path='/ingredients/:id' element={<Modal children={<IngredientDetails />} title={'Детали ингредиента'} onClose={() => {}} />} />
           <Route path='/login' element={<ProtectedRoute onlyUnAuth><Login /></ProtectedRoute>} />
           <Route path='/register' element={<ProtectedRoute onlyUnAuth><Register /></ProtectedRoute>} />
-          <Route path='/forgot-password' element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
+          <Route path='/forgot-password' element={<ProtectedRoute onlyUnAuth><ForgotPassword /></ProtectedRoute>} />
           <Route path='/reset-password' element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
           <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path='/profile/orders' element={<ProtectedRoute><ProfileOrders /></ProtectedRoute>} />
-          <Route path='/profile/orders/:number' element={<ProtectedRoute><Modal children={<OrderInfo />} title={'Заказ'} onClose={() => {}} /></ProtectedRoute>} />
           <Route path='/*' element={<ProtectedRoute><NotFound404 /></ProtectedRoute>} />
         </Routes>
+
+        {location.state?.background && (
+          <Routes>
+            <Route path='/feed/:number' element={<Modal children={<OrderInfo />} title={'Заказ'} onClose={() => {}} />} />
+            <Route path='/ingredients/:id' element={<Modal children={<IngredientDetails />} title={'Детали ингредиента'} onClose={() => {}} />} />
+            <Route path='/profile/orders/:number' element={<ProtectedRoute><Modal children={<OrderInfo />} title={'Заказ'} onClose={() => {}} /></ProtectedRoute>} />
+          </Routes>
+        )}
       </div>
     </>
   )

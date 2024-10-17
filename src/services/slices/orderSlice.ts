@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { getOrderByNumberApi } from "@api";
+import { getOrderByNumberApi, orderBurgerApi } from "@api";
 import { TOrder } from "@utils-types";
 
-export const fetchOrder = createAsyncThunk(
-  'order/fetchOrder',
+export const fetchGetOrder = createAsyncThunk(
+  'order/fetchGetOrder',
   async (number: number) => {
     const response = await getOrderByNumberApi(number);
     return response.orders[0]
@@ -26,10 +26,10 @@ const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrder.pending, (state) => {
+      .addCase(fetchGetOrder.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchOrder.fulfilled, (state, action) => {
+      .addCase(fetchGetOrder.fulfilled, (state, action) => {
         state.order = action.payload;
         state.loading = false
       })

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import { fetchIngredients, getIngredientsData } from '../../services/slices/ingredientSlice';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
+  /** TODO: взять переменные из стора -> DONE */
   const ingredients = useSelector(getIngredientsData);
  
   const buns = ingredients.filter(item => item.type === 'bun');
@@ -50,8 +50,6 @@ export const BurgerIngredients: FC = () => {
     if (tab === 'sauce')
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  // return null;
 
   return (
     <BurgerIngredientsUI

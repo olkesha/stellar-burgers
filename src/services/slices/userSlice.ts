@@ -2,7 +2,6 @@ import { TRegisterData, getUserApi, loginUserApi, logoutApi } from "@api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { TUser } from "@utils-types";
 import { deleteCookie, getCookie, setCookie } from "../../utils/cookie";
-import { get } from "http";
 
 export const fetchLoginUser = createAsyncThunk(
   'user/fetchLoginUser',
@@ -14,18 +13,18 @@ export const fetchLoginUser = createAsyncThunk(
   }
 )
 
-// export const checkUserAuth = createAsyncThunk(
-//   'user/checkUserAuth',
-//   (_, { dispatch }) => {
-//     if (getCookie('accessToken')) {
-//       getUserApi().finally(() => {
-//         dispatch(authChecked()); 
-//       });
-//     } else {
-//       dispatch(authChecked());
-//     }
-//   }
-// ); 
+export const checkUserAuth = createAsyncThunk(
+  'user/checkUserAuth',
+  (_, { dispatch }) => {
+    if (getCookie('accessToken')) {
+      getUserApi().finally(() => {
+        dispatch(authChecked()); 
+      });
+    } else {
+      dispatch(authChecked());
+    }
+  }
+); 
 
 export const fetchLogoutUser = createAsyncThunk(
   'user/fetchLogoutUser',
@@ -45,7 +44,7 @@ export const fetchLogoutUser = createAsyncThunk(
 type TUserState = {
   isAuthChecked: boolean,
   isAuthenticated: boolean;
-  data: TUser |null,
+  user: TUser | null,
   loginUserError: null,
   loginUserRequest: boolean,
 }
@@ -53,7 +52,7 @@ type TUserState = {
 const initialState: TUserState = {
   isAuthChecked: false,
   isAuthenticated: false,
-  data: null,
+  user: null,
   loginUserError: null,
   loginUserRequest: false,
 }
@@ -66,10 +65,10 @@ const userSlice = createSlice({
       state.isAuthChecked = true;
     },
     userLogout: (state) => {
-      state.data = null;
+      state.user = null;
     },
     registerUser: (state, action) => {
-      state.data = action.payload;
+      state.user = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -83,7 +82,7 @@ const userSlice = createSlice({
         state.isAuthChecked = true;
       })
       .addCase(fetchLoginUser.fulfilled, (state, action) => {
-        state.data = action.payload;
+        state.user = action.payload;
         state.loginUserRequest = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
@@ -92,7 +91,7 @@ const userSlice = createSlice({
   selectors: {
     isAuthenticatedSelector: state => state.isAuthenticated,
     isAuthCheckedSelector: state => state.isAuthChecked,
-    getUserData: state => state.data
+    getUserData: state => state.user
   }
 })
 

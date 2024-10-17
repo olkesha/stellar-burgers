@@ -71,6 +71,7 @@ type TOrdersResponse = TServerResponse<{
   data: TOrder[];
 }>;
 
+// получить массив ингредиентов
 export const getIngredientsApi = () =>
   fetch(`${URL}/ingredients`)
     .then((res) => checkResponse<TIngredientsResponse>(res))
@@ -79,6 +80,7 @@ export const getIngredientsApi = () =>
       return Promise.reject(data);
     });
 
+// данные для ленты заказов
 export const getFeedsApi = () =>
   fetch(`${URL}/orders/all`)
     .then((res) => checkResponse<TFeedsResponse>(res))
@@ -87,6 +89,8 @@ export const getFeedsApi = () =>
       return Promise.reject(data);
     });
 
+
+// для получения заказов у авторизированного пользователя
 export const getOrdersApi = () =>
   fetchWithRefresh<TFeedsResponse>(`${URL}/orders`, {
     method: 'GET',
@@ -104,6 +108,7 @@ type TNewOrderResponse = TServerResponse<{
   name: string;
 }>;
 
+// отправить заказ
 export const orderBurgerApi = (data: string[]) =>
   fetchWithRefresh<TNewOrderResponse>(`${URL}/orders`, {
     method: 'POST',
@@ -123,6 +128,7 @@ type TOrderResponse = TServerResponse<{
   orders: TOrder[];
 }>;
 
+// получить один заказ по его номеру
 export const getOrderByNumberApi = (number: number) =>
   fetch(`${URL}/orders/${number}`, {
     method: 'GET',
@@ -143,6 +149,8 @@ type TAuthResponse = TServerResponse<{
   user: TUser;
 }>;
 
+
+// все, что ниже - для пользака
 export const registerUserApi = (data: TRegisterData) =>
   fetch(`${URL}/auth/register`, {
     method: 'POST',

@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { getIngredientsData } from '../../services/slices/ingredientSlice';
 
 export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
+  /** TODO: взять переменную из стора -> DONE */
   const { id } = useParams()
   const ingredients = useSelector(getIngredientsData);
 

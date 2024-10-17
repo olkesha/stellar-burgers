@@ -1,28 +1,32 @@
 import { FC, useEffect, useMemo } from 'react';
-import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import { getIngredientsData } from '../../services/slices/ingredientSlice';
+import { fetchCreateOrder, getModalData, getRequest, getСonstructorItems } from '../../services/slices/burgerSlice';
+import { getUserData } from '../../services/slices/userSlice';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const ingredients: TIngredient[] = useSelector(getIngredientsData);
-  const buns: TIngredient[] = ingredients.filter(item => item.type === 'bun')
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
 
-  const constructorItems = {
-    bun: buns[0] || {
-      price: 0,
-    },
-    ingredients: [],
-  };
+  const user = useSelector(getUserData)
+  const constructorItems = useSelector(getСonstructorItems)
 
-  const orderRequest = false;
+  const orderRequest = useSelector(getRequest);
 
-  const orderModalData = null;
+  const orderModalData = useSelector(getModalData);
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
+    if (!user) {
+      navigate('/login', { state: { from: location }, replace: true });
+    }
   };
+  
   const closeOrderModal = () => {};
 
   const price = useMemo(
