@@ -9,9 +9,9 @@ export const Feed: FC = () => {
   /** TODO: взять переменную из стора */
   const orders: TOrder[] = useSelector(getFeedOrders);
   const dispatch = useDispatch()
-
+  
 	useEffect(() => {
-		dispatch(fetchFeeds());
+    dispatch(fetchFeeds());
 	}, [dispatch])
 
   if (!orders.length) {

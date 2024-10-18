@@ -1,22 +1,37 @@
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 import { BurgerConstructorElementUI } from '@ui';
 import { BurgerConstructorElementProps } from './type';
-import { useSelector } from '../../services/store';
-import { getСonstructorItems } from '../../services/slices/burgerSlice'
+import { useDispatch, useSelector } from '../../services/store';
+import { getСonstructorItems, updateIngredients } from '../../services/slices/burgerSlice'
 
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
-
-    const constructorItems = useSelector(getСonstructorItems)
-
-    const ing = constructorItems.ingredients.find(item => item._id === ingredient._id)
+    const constructorItems = useSelector(getСonstructorItems);
+    const dispatch = useDispatch();
     
-    // перемещение ингредиентов
-    const handleMoveDown = () => {};
+    const handleMoveDown = () => {
+      if (index < constructorItems.ingredients.length - 1) {
+        const newIngredients = [...constructorItems.ingredients];
+        const [removed] = newIngredients.splice(index, 1);
+        newIngredients.splice(index + 1, 0, removed);
+        dispatch(updateIngredients(newIngredients));
+      }
+    };
 
-    const handleMoveUp = () => {};
+    const handleMoveUp = () => {
+      if (index > 0) {
+        const newIngredients = [...constructorItems.ingredients];
+        const [removed] = newIngredients.splice(index, 1);
+        newIngredients.splice(index - 1, 0, removed);
+        dispatch(updateIngredients(newIngredients));
+      }
+    };
 
-    const handleClose = () => {};
+    const handleClose = () => {
+      const newIngredients = [...constructorItems.ingredients];
+      newIngredients.splice(index, 1)
+      dispatch(updateIngredients(newIngredients));
+    };
 
     return (
       <BurgerConstructorElementUI

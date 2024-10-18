@@ -39,6 +39,9 @@ const burgerSlice = createSlice({
         state.constructorItems.ingredients.push(action.payload); // добавляем ингредиент
       }
     },
+    updateIngredients(state, action: PayloadAction<TIngredient[]>) {
+      state.constructorItems.ingredients = action.payload;
+    }
   },
   selectors: {
     getСonstructorItems: state => state.constructorItems,
@@ -47,6 +50,6 @@ const burgerSlice = createSlice({
   }
 })
 
-export const { addIngredient } = burgerSlice.actions;
+export const { addIngredient, updateIngredients } = burgerSlice.actions;
 export const { getСonstructorItems, getRequest, getModalData } = burgerSlice.selectors;
 export const burgerReducer = burgerSlice.reducer;
