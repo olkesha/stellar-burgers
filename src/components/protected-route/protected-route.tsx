@@ -9,29 +9,27 @@ type ProtectedRouteProps = {
   children: React.ReactElement;
 };
 
-export const ProtectedRoute = ({onlyUnAuth = false, children}: ProtectedRouteProps) => {
+export const ProtectedRoute = ({onlyUnAuth, children}: ProtectedRouteProps) => {
   const location = useLocation();
   const isAuthChecked = useSelector(isAuthCheckedSelector);
   const user = useSelector(getUserData);
   const dispatch = useDispatch()
 
-  const from = location.state?.from || { pathname: '/' };
-
   useEffect(() => {
     dispatch(authChecked())
-  })
+  }, [dispatch])
 
   if (!isAuthChecked) { // пока идёт чекаут пользователя, показываем прелоадер
     return <Preloader />;
   }
 
-  if (!onlyUnAuth && !user) { // если пользователь на странице авторизации и данных в хранилище нет, то делаем редирект
+  if (!onlyUnAuth && !user) {
     return <Navigate replace to='/login' state={{ from: location }} />;
   }
 
-  if (onlyUnAuth && user) { // если пользователь на странице авторизации и данные есть в хранилище
+  if (onlyUnAuth && user) {
     const from = location.state?.from || { pathname: '/' };
-    return <Navigate replace to="/" state={from} />;
+    return <Navigate replace to={'/'} />;
   }
 
   return children;

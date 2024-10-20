@@ -10,20 +10,38 @@ export const fetchGetOrder = createAsyncThunk(
   }
 )
 
+export const fetchPostOrder = createAsyncThunk(
+  'order/fetchPostOrder',
+  async (ingredients: string[]) => {
+    const response = await orderBurgerApi(ingredients);
+    return response.order
+  }
+)
+
 type TOrderState = {
   order: TOrder | null;
-  loading: boolean
+  loading: boolean;
+  orderRequest: boolean;
+  orderModalData: TOrder | null
 }
 
 const initialState: TOrderState = {
   order: null,
-  loading: false
+  loading: false,
+  orderRequest: false,
+  orderModalData: null
 }
 
 const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    clearOrderModalData: (state) => {
+      state.order = null;
+      state.orderModalData = null;
+      state.orderRequest = false
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchGetOrder.pending, (state) => {
@@ -33,11 +51,20 @@ const orderSlice = createSlice({
         state.order = action.payload;
         state.loading = false
       })
+      .addCase(fetchPostOrder.fulfilled, (state, action) => {
+        state.order = action.payload;
+        state.loading = false;
+        state.orderRequest = true;
+        state.orderModalData = action.payload
+      })
   },
   selectors: {
-    getOrderData: state => state
+    getOrderData: state => state,
+    getOrderRequest: state => state.orderRequest,
+    getOrderModalData: state => state.order
   }
 })
 
-export const { getOrderData } = orderSlice.selectors;
+export const { clearOrderModalData } = orderSlice.actions;
+export const { getOrderData, getOrderRequest, getOrderModalData } = orderSlice.selectors;
 export const orderReducer = orderSlice.reducer;

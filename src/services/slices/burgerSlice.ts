@@ -2,21 +2,11 @@ import { orderBurgerApi } from "@api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TIngredient, TOrder } from "@utils-types";
 
-export const fetchCreateOrder = createAsyncThunk(
-  'burger/fetchCreateOrder',
-  async (ingredients: string[]) => {
-    const response = await orderBurgerApi(ingredients);
-    return response.order
-  }
-)
-
 type TBurgerState = {
   constructorItems: {
     bun: TIngredient | null,
     ingredients: TIngredient[]
-  },
-  request: boolean,
-  modalData: TOrder | null
+  }
 }
 
 const initialState: TBurgerState = {
@@ -24,8 +14,6 @@ const initialState: TBurgerState = {
     bun: null,
     ingredients: []
   },
-  request: false,
-  modalData: null
 }
 
 const burgerSlice = createSlice({
@@ -41,15 +29,17 @@ const burgerSlice = createSlice({
     },
     updateIngredients(state, action: PayloadAction<TIngredient[]>) {
       state.constructorItems.ingredients = action.payload;
+    },
+    clearIngredients(state) {
+      state.constructorItems.bun = null;
+      state.constructorItems.ingredients = []
     }
   },
   selectors: {
     getСonstructorItems: state => state.constructorItems,
-    getRequest: state => state.request,
-    getModalData: state => state.modalData
   }
 })
 
-export const { addIngredient, updateIngredients } = burgerSlice.actions;
-export const { getСonstructorItems, getRequest, getModalData } = burgerSlice.selectors;
+export const { addIngredient, updateIngredients, clearIngredients } = burgerSlice.actions;
+export const { getСonstructorItems } = burgerSlice.selectors;
 export const burgerReducer = burgerSlice.reducer;

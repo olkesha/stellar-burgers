@@ -24,8 +24,6 @@ import { ProtectedRoute } from '../protected-route/protected-route';
 
 const App = () => {
   const location = useLocation()
-  // console.log(location);
-  
   const background = location.state?.background || location
 
   return (
@@ -38,7 +36,7 @@ const App = () => {
           <Route path='/login' element={<ProtectedRoute onlyUnAuth><Login /></ProtectedRoute>} />
           <Route path='/register' element={<ProtectedRoute onlyUnAuth><Register /></ProtectedRoute>} />
           <Route path='/forgot-password' element={<ProtectedRoute onlyUnAuth><ForgotPassword /></ProtectedRoute>} />
-          <Route path='/reset-password' element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
+          <Route path='/reset-password' element={<ProtectedRoute onlyUnAuth><ResetPassword /></ProtectedRoute>} />
           <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path='/profile/orders' element={<ProtectedRoute><ProfileOrders /></ProtectedRoute>} />
           <Route path='/*' element={<ProtectedRoute><NotFound404 /></ProtectedRoute>} />

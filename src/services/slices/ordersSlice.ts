@@ -4,12 +4,10 @@ import { getOrdersApi } from '../../utils/burger-api';
 import { TOrder } from '@utils-types';
 
 // для авторизованного пользака
-const fetchOrders = createAsyncThunk(
+export const fetchOrders = createAsyncThunk(
   'feed/fetchOrders',
   async () => {
     const data = await getOrdersApi();
-    console.log(data);
-    
     return data;
   }
 )

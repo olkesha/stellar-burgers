@@ -12,8 +12,7 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
     const handleMoveDown = () => {
       if (index < constructorItems.ingredients.length - 1) {
         const newIngredients = [...constructorItems.ingredients];
-        const [removed] = newIngredients.splice(index, 1);
-        newIngredients.splice(index + 1, 0, removed);
+        newIngredients.splice(index + 1, 0, newIngredients.splice(index, 1)[0])
         dispatch(updateIngredients(newIngredients));
       }
     };
@@ -21,8 +20,7 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
     const handleMoveUp = () => {
       if (index > 0) {
         const newIngredients = [...constructorItems.ingredients];
-        const [removed] = newIngredients.splice(index, 1);
-        newIngredients.splice(index - 1, 0, removed);
+        newIngredients.splice(index - 1, 0, newIngredients.splice(index, 1)[0])
         dispatch(updateIngredients(newIngredients));
       }
     };
