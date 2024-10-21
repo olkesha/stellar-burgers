@@ -1,4 +1,6 @@
 import React, { FC } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   Button,
   ConstructorElement,
@@ -44,7 +46,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
               ingredient={item}
               index={index}
               totalItems={constructorItems.ingredients.length}
-              key={index}
+              key={uuidv4()}
             />
           )
         )

@@ -31,8 +31,10 @@ const burgerSlice = createSlice({
       state.constructorItems.ingredients = action.payload;
     },
     clearIngredients(state) {
-      state.constructorItems.bun = null;
-      state.constructorItems.ingredients = []
+      state.constructorItems = {
+        bun: null,
+        ingredients: []
+      }
     }
   },
   selectors: {

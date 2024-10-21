@@ -1,11 +1,11 @@
 import { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TIngredient } from '@utils-types';
-import { BurgerConstructorUI } from '@ui';
+import { BurgerConstructorUI, Preloader } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import { clearIngredients, getСonstructorItems } from '../../services/slices/burgerSlice';
 import { getUserData } from '../../services/slices/userSlice';
-import { fetchPostOrder, getOrderModalData, getOrderRequest, clearOrderModalData } from '../../services/slices/orderSlice';
+import { fetchPostOrder, getOrderModalData, getOrderRequest, clearOrderModalData, getLoading } from '../../services/slices/orderSlice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
@@ -33,14 +33,14 @@ export const BurgerConstructor: FC = () => {
         ...constructorItems.ingredients.map((item: TIngredient) => item._id),
         constructorItems.bun._id
       ];
-      dispatch(fetchPostOrder(ingredients));
-      dispatch(clearIngredients());
+      dispatch(fetchPostOrder(ingredients))
     }
 };
   
   const closeOrderModal = () => {
-    dispatch(clearOrderModalData())
-    navigate(background, { replace: true })
+    dispatch(clearIngredients());
+    dispatch(clearOrderModalData());
+    navigate(background, { replace: true });
   };
 
   const price = useMemo(

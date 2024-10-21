@@ -4,18 +4,12 @@ import { TOrder } from "@utils-types";
 
 export const fetchGetOrder = createAsyncThunk(
   'order/fetchGetOrder',
-  async (number: number) => {
-    const response = await getOrderByNumberApi(number);
-    return response.orders[0]
-  }
+  getOrderByNumberApi
 )
 
 export const fetchPostOrder = createAsyncThunk(
   'order/fetchPostOrder',
-  async (ingredients: string[]) => {
-    const response = await orderBurgerApi(ingredients);
-    return response.order
-  }
+  orderBurgerApi
 )
 
 type TOrderState = {
@@ -39,7 +33,7 @@ const orderSlice = createSlice({
     clearOrderModalData: (state) => {
       state.order = null;
       state.orderModalData = null;
-      state.orderRequest = false
+      state.orderRequest = false;
     }
   },
   extraReducers: (builder) => {
@@ -48,23 +42,28 @@ const orderSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchGetOrder.fulfilled, (state, action) => {
-        state.order = action.payload;
+        state.order = action.payload.orders[0];
         state.loading = false
       })
-      .addCase(fetchPostOrder.fulfilled, (state, action) => {
-        state.order = action.payload;
-        state.loading = false;
+      .addCase(fetchPostOrder.pending, (state) => {
+        state.loading = true;
         state.orderRequest = true;
-        state.orderModalData = action.payload
+      })
+      .addCase(fetchPostOrder.fulfilled, (state, action) => {
+        state.order = action.payload.order;
+        state.loading = false;
+        state.orderRequest = false;
+        state.orderModalData = action.payload.order
       })
   },
   selectors: {
     getOrderData: state => state,
+    getLoading: state => state.loading,
     getOrderRequest: state => state.orderRequest,
     getOrderModalData: state => state.order
   }
 })
 
 export const { clearOrderModalData } = orderSlice.actions;
-export const { getOrderData, getOrderRequest, getOrderModalData } = orderSlice.selectors;
+export const { getLoading, getOrderData, getOrderRequest, getOrderModalData } = orderSlice.selectors;
 export const orderReducer = orderSlice.reducer;

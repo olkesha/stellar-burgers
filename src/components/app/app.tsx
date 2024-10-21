@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import '../../index.css';
 import styles from './app.module.css';
 
@@ -19,18 +19,27 @@ import { OrderInfo } from '@components';
 import { IngredientDetails } from '@components';
 
 import { ProtectedRoute } from '../protected-route/protected-route';
-
+import { useEffect } from 'react';
+import { useDispatch } from '../../services/store';
+import { fetchIngredients } from '../../services/slices/ingredientSlice';
+import { checkUserAuth } from '../../services/slices/userSlice';
 
 
 const App = () => {
-  const location = useLocation()
-  const background = location.state?.background || location
+  const location = useLocation();
+  const background = location.state?.background || location;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkUserAuth());
+    dispatch(fetchIngredients());
+  }, [dispatch])
 
   return (
     <>
       <div className={styles.app}>
         <AppHeader />
-        <Routes location={background}>
+        <Routes location={background} >
           <Route path='/' element={<ConstructorPage />}/>
           <Route path='/feed' element={<Feed />} />
           <Route path='/login' element={<ProtectedRoute onlyUnAuth><Login /></ProtectedRoute>} />

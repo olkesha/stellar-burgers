@@ -34,16 +34,25 @@ export const fetchRegisterUser = createAsyncThunk(
 // проверка авторизован ли
 export const checkUserAuth = createAsyncThunk(
   'user/checkUserAuth',
-  (_, { dispatch }) => {
-    if (getCookie('accessToken')) {
-      getUserApi().finally(() => {
-        dispatch(authChecked()); 
-      });
+  async (_, { dispatch }) => {
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      try {
+        const userData = await getUserApi();
+        dispatch(authChecked());
+        return userData
+      } 
+      catch (error) {
+        dispatch(authChecked());
+        throw new Error('Ошибка при получении данных пользователя');
+      }
     } else {
       dispatch(authChecked());
+      return null;
     }
   }
-); 
+);
+
 
 // выход
 export const fetchLogoutUser = createAsyncThunk(
@@ -55,28 +64,21 @@ export const fetchLogoutUser = createAsyncThunk(
         deleteCookie('accessToken'); // очищаем accessToken
         dispatch(userLogout()); // удаляем пользователя из хранилища
       })
-      .catch(() => {
-        console.log('Ошибка выполнения выхода');
-      });
   }
 );
-
 
 // обновление данных
 export const fetchUpdateUserData = createAsyncThunk(
   'user/fetchUpdateUserData',
-  async (data: TRegisterData) => {
-    const response = await updateUserApi(data);
-    return response;
-  }
+  updateUserApi
 )
 
 type TUserState = {
   isAuthChecked: boolean,
   isAuthenticated: boolean;
-  user: TUser | null
-  loginUserError: string | null,
-  loginUserRequest: boolean,
+  user: TUser | null;
+  loginUserError: string | null;
+  loginUserRequest: boolean;
 }
 
 const initialState: TUserState = {
@@ -126,6 +128,20 @@ const userSlice = createSlice({
         state.user = null;
         state.isAuthChecked = false;
         state.isAuthenticated = false;
+      })
+      .addCase(checkUserAuth.pending, (state) => {
+        state.loginUserRequest = true;
+      })
+      .addCase(checkUserAuth.fulfilled, (state, action) => {
+        if (action.payload && action.payload.user) {
+          state.user = action.payload.user;
+          state.isAuthenticated = true;
+        } else {
+          state.user = null;
+          state.isAuthenticated = false;
+        }
+        state.isAuthChecked = true;
+        state.loginUserRequest = false;
       })
   },
   selectors: {
