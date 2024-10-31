@@ -7,6 +7,7 @@ import type {JestConfigWithTsJest} from 'ts-jest';
 
 const config: JestConfigWithTsJest = {
     // множество разных настроек
+        verbose: true,
         transform: {
           // '^.+\\.[tj]sx?$' для обработки файлов js/ts с помощью `ts-jest`
           // '^.+\\.m?[tj]sx?$' для обработки файлов js/ts/mjs/mts с помощью `ts-jest`

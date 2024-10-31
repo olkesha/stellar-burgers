@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "user": {
+    "email": "olkesha@mail.ru",
+    "name": "никита"
+  },
+  "accessToken": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MTQ5NDUzZDgyOWJlMDAxYzc3NzI2NiIsImlhdCI6MTczMDM1OTMzOCwiZXhwIjoxNzMwMzYwNTM4fQ.xJtuI2BEFbPcFDLB_ln_UkIJluk7gezH2NML8jykZGo",
+  "refreshToken": "9f66755c60d45f8b6e7571d2d80565e573d1e834021f7e16ed67910777c6f22159bd018f0ecdce3f"
+}
