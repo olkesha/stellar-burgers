@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { authChecked, getUserData, isAuthCheckedSelector } from "../../services/slices/userSlice";
+import { authChecked, getUserData, isAuthCheckedSelector } from "../../services/slices/userSlice/userSlice";
 import { useDispatch, useSelector } from "../../services/store";
 import { Preloader } from "../ui/preloader";
 import { useEffect } from "react";

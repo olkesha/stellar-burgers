@@ -1,7 +1,7 @@
-import { TRegisterData, getUserApi, loginUserApi, logoutApi, registerUserApi, updateUserApi } from "@api";
+import { TRegisterData, getUserApi, loginUserApi, logoutApi, registerUserApi, updateUserApi } from "../../../utils/burger-api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { TUser } from "@utils-types";
-import { deleteCookie, getCookie, setCookie } from "../../utils/cookie";
+import { deleteCookie, getCookie, setCookie } from "../../../utils/cookie";
 
 // вход
 export const fetchLoginUser = createAsyncThunk(
@@ -108,9 +108,9 @@ const userSlice = createSlice({
         state.loginUserRequest = true;
         state.loginUserError = null;
       })
-      .addCase(fetchLoginUser.rejected, (state, action) => {
+      .addCase(fetchLoginUser.rejected, (state) => {
         state.loginUserRequest = false;
-        state.isAuthChecked = true;
+        state.isAuthChecked = false;
       })
       .addCase(fetchLoginUser.fulfilled, (state, action) => {
         state.user = action.payload;
@@ -118,18 +118,25 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
+
       .addCase(fetchRegisterUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isAuthenticated = false;
+        state.isAuthChecked = true;
       })
+
       .addCase(fetchUpdateUserData.fulfilled, (state, action) => {
         state.user = action.payload.user;
       })
+
       .addCase(fetchLogoutUser.fulfilled, (state) => {
         state.user = null;
         state.isAuthChecked = false;
         state.isAuthenticated = false;
       })
+
       .addCase(checkUserAuth.pending, (state) => {
+        state.isAuthChecked = false;
         state.loginUserRequest = true;
       })
       .addCase(checkUserAuth.fulfilled, (state, action) => {
@@ -151,6 +158,7 @@ const userSlice = createSlice({
   }
 })
 
+export const userSliceInitialState = initialState;
 export const { isAuthenticatedSelector, isAuthCheckedSelector, getUserData } = userSlice.selectors;
 export const { authChecked, userLogout } = userSlice.actions;
 export const userReducer = userSlice.reducer;

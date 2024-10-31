@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getFeedsApi } from '../../utils/burger-api';
+import { getFeedsApi } from '../../../utils/burger-api';
 import { TOrder } from '@utils-types';
 
 export const fetchFeeds = createAsyncThunk( // createAsyncThunk = action creator
@@ -18,7 +18,6 @@ type TOrderData = {
 type TFeedState = {
   feed: TOrderData;
   loading: boolean;
-  error?: string | null
 }
 
 const initialState: TFeedState = {
@@ -28,7 +27,6 @@ const initialState: TFeedState = {
     totalToday: 0,
   },
   loading: false,
-  error: ''
 }
 
 const feedSlice = createSlice({
@@ -37,6 +35,16 @@ const feedSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchFeeds.rejected, (state) => {
+        state.feed.orders = [];
+        state.feed.total = 0;
+        state.feed.totalToday = 0;
+      })
+      .addCase(fetchFeeds.pending, (state) => {
+        state.feed.orders = [];
+        state.feed.total = 0;
+        state.feed.totalToday = 0;
+      })
       .addCase(fetchFeeds.fulfilled, (state, action) => {
         state.feed.orders = action.payload.orders;
         state.feed.total = action.payload.total;
@@ -49,9 +57,9 @@ const feedSlice = createSlice({
     getFeedTotal: (state) => state.feed.total,
     getFeedTotalToday: (state) => state.feed.totalToday,
     getStateLoading: (state) => state.loading,
-    getStateError: (state) => state.error
   }
 })
 
-export const { getFeed, getFeedOrders, getFeedTotal, getFeedTotalToday, getStateLoading, getStateError } = feedSlice.selectors;
+export const feedSliceInitialState = initialState;
+export const { getFeed, getFeedOrders, getFeedTotal, getFeedTotalToday, getStateLoading } = feedSlice.selectors;
 export const feedReducer = feedSlice.reducer;

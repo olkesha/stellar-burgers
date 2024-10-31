@@ -1,11 +1,11 @@
 import { FC, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TIngredient } from '@utils-types';
-import { BurgerConstructorUI, Preloader } from '@ui';
+import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { clearIngredients, getСonstructorItems } from '../../services/slices/burgerSlice';
-import { getUserData } from '../../services/slices/userSlice';
-import { fetchPostOrder, getOrderModalData, getOrderRequest, clearOrderModalData, getLoading } from '../../services/slices/orderSlice';
+import { clearIngredients, getСonstructorItems } from '../../services/slices/burgerSlice/burgerSlice';
+import { getUserData } from '../../services/slices/userSlice/userSlice';
+import { fetchPostOrder, getOrderModalData, getOrderRequest, clearOrderModalData } from '../../services/slices/orderSlice/orderSlice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */

@@ -3,9 +3,9 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useDispatch, useSelector } from '../../services/store';
-import { fetchGetOrder, getOrderData } from '../../services/slices/orderSlice';
+import { fetchGetOrder, getOrderData } from '../../services/slices/orderSlice/orderSlice';
 import { useParams } from 'react-router-dom';
-import { getIngredientsData } from '../../services/slices/ingredientSlice';
+import { getIngredientsData } from '../../services/slices/ingredientSlice/ingredientSlice';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора -> DONE */

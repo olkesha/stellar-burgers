@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { getOrderByNumberApi, orderBurgerApi } from "@api";
+import { getOrderByNumberApi, orderBurgerApi } from "../../../utils/burger-api";
 import { TOrder } from "@utils-types";
 
 export const fetchGetOrder = createAsyncThunk(
@@ -43,8 +43,10 @@ const orderSlice = createSlice({
       })
       .addCase(fetchGetOrder.fulfilled, (state, action) => {
         state.order = action.payload.orders[0];
+        state.orderModalData = null;
         state.loading = false
       })
+      
       .addCase(fetchPostOrder.pending, (state) => {
         state.loading = true;
         state.orderRequest = true;
@@ -64,6 +66,7 @@ const orderSlice = createSlice({
   }
 })
 
+export const orderSliceInitialState = initialState;
 export const { clearOrderModalData } = orderSlice.actions;
 export const { getLoading, getOrderData, getOrderRequest, getOrderModalData } = orderSlice.selectors;
 export const orderReducer = orderSlice.reducer;
